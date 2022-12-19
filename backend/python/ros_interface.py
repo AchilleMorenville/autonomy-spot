@@ -57,7 +57,7 @@ class RosInterface(Node):
 
 		return future.result()
 
-	def send_request_slam_save_map(self, destination, resolution=0.1):
+	def send_request_slam_save_map(self, destination, resolution=0.01):
 		req = SlamSaveMap.Request()
 		req.destination = destination + "/map_go.pcd"
 		req.resolution = resolution

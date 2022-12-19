@@ -1,0 +1,4 @@
+docker build ./frontend/ -t frontend
+docker build ./ros/ -t ros-prod
+docker build ./backend/ -t backend
+

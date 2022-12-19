@@ -1,0 +1,9 @@
+[submodule "ros/autonomy-packages"]
+	path = ros/autonomy-packages
+	url = https://github.com/AchilleMorenville/autonomy-packages.git
+[submodule "backend/autonomy-packages"]
+	path = backend/autonomy-packages
+	url = https://github.com/AchilleMorenville/autonomy-packages.git
+[submodule "backend/thingsboard-python-rest-client"]
+	path = backend/thingsboard-python-rest-client
+	url = https://github.com/CSTC-WTCB-BBRI/thingsboard-python-rest-client.git

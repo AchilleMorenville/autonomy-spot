@@ -247,18 +247,44 @@ def potree(response: Response):
     except Exception as e : 
         print(str(e))
         return JSONResponse(status_code=400, content={'msg' : str(e)}) 
-# @app.get("/zipPotree")
-# def zipPotree(response: Response):
-#     try:
-#         ret = createZip(scan.get_potreePath()) 
-#         if not (ret['status'] == 'ok') : 
-#             return JSONResponse(status_code=400, content={'msg' : ret['msg']}) 
-    
-#         else : return {'msg' : ret['msg']}
 
-#     except Exception as e : 
-#         print(str(e))
-#         return JSONResponse(status_code=400, content={'msg' : str(e)}) 
+@app.get("/send2Site3d")
+def send2Site3d(response: Response, realtityCaptureName : str = None):
+    global ros_interface
+    try:
+        if ros_interface is None:
+            return JSONResponse(status_code=400, content={'msg' : "Ros interface not launched"}) 
+
+        if ros_interface.get_potree_path() == None : 
+            return JSONResponse(status_code=200, content={'msg' : 'Please export to potree first'}) 
+
+        with RestClientPE(base_url=TB_url) as rest_client:
+            try:
+                # Auth with credentials
+                rest_client.login(username=TB_user, password=TB_password)
+                current_user = rest_client.get_user()
+                token = rest_client.get_user_token(current_user.id)
+                token = token.token
+
+                retZip =  createZip(ros_interface.get_potree_path()) 
+
+                RCName = realtityCaptureName
+                jobsiteId = '339446f0-6c37-11ed-8aba-99170584c638'
+   
+                retSite3d = sendPointCloud2Cloud(ros_interface.get_potree_path(),url = SITE3D_url, RCName=RCName, jobsiteId=jobsiteId,  token = token)
+                if not (retSite3d['status'] == 'ok') : 
+                    return JSONResponse(status_code=400, content={'msg' : retSite3d['msg']}) 
+                
+                return {'msg' : {"msgSite3d": retSite3d['msg'] , 'msgZip' : retZip['msgZip']}}
+
+            except Exception as e : 
+                print(str(e))
+                return JSONResponse(status_code=400, content={'msg' : str(e)}) 
+
+
+    except Exception as e : 
+        print(str(e))
+        return JSONResponse(status_code=400, content={'msg' : str(e)}) 
 
 
 # @app.get("/send2Site3d")

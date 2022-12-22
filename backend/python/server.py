@@ -227,84 +227,26 @@ def potree(response: Response):
         print(str(e))
         return JSONResponse(status_code=400, content={'msg' : str(e)}) 
 
+@app.get("/zipPotree")
+def potree(response: Response):
+    global ros_interface
+    try:
 
-# @app.get("/reset")
-# def reset(response: Response):
-#     try : 
-#         scan = capture_slam_data.scanning()
-#         return {"msg": "reset done"}
-    
-#     except Exception as e : 
-#         print(str(e))
-#         return {'msg' : str(e)}
+        if ros_interface is None:
+            return JSONResponse(status_code=400, content={'msg' : "Ros interface not launched"}) 
 
-# @app.get("/connect2Spot", status_code=200)
-# def connect2spot(response: Response):
-#     try :
-#         user = os.getenv("SPOT_USER")
-#         password = os.getenv("SPOT_PWD")
-#         spot_ip = os.getenv("SPOT_IP")
-#         ret = scan.connect(spot_ip = spot_ip, user=user, password=password)
-        
-#         if not (ret['status'] == 'ok') : 
-#             return JSONResponse(status_code=400, content={'msg' : ret['msg']}) 
-#         else  : return {'msg' : ret['msg']}
-    
-#     except Exception as e : 
-#         print(str(e))
-#         return JSONResponse(status_code=400, content={'msg' : str(e)}) 
+        if ros_interface.set_potree_path == None : 
+            return JSONResponse(status_code=200, content={'msg' : 'Please export to potree first'}) 
 
+        ret = createZip(ros_interface.get_potreePath()) 
+        print(ret)
+        if not (ret['status'] == 'ok') :
+            return JSONResponse(status_code=400, content={'msg' : ret['msg']}) 
+        return {"msg": ret['msg'] }
 
-# @app.get("/stop_slam")
-# async def stop_slam(response: Response, background_tasks: BackgroundTasks):
-#     try : 
-#         background_tasks.add_task(scan.stop_scan)
-#         return {"msg":"stop command sent..."}
-#     except Exception as e : 
-#         print(str(e))
-#         return JSONResponse(status_code=400, content={'msg' : str(e)}) 
-
-# @app.get("/start_slam")
-# async def start_slam(response: Response, background_tasks: BackgroundTasks, timeSleep : float =0.2):
-#     try:
-#         if scan.is_connected : 
-#             background_tasks.add_task(scan.start_scan, timeSleep)
-#             return {"msg":"SLAM Algo started", 'sleep' : timeSleep}
-#         else :
-#             return {"msg":"SLAM Algo NOT started\n please first connect to SPOT"} 
-#     except Exception as e : 
-#         print(str(e))
-#         return JSONResponse(status_code=400, content={'msg' : str(e)}) 
-
-# @app.get("/status_slam")
-# def slam_status(response: Response):
-#     try:
-#         ret = scan.get_scanning_status()
-#         if not (ret['status'] == 'ok') : 
-#             return JSONResponse(status_code=400, content={'msg' : ret['msg']}) 
-#         return {'msg' : ret['msg']}
-
-#     except Exception as e : 
-#         print(str(e))
-#         return JSONResponse(status_code=400, content={'msg' : str(e)}) 
-
-
-# @app.get("/potree")
-# def potree(response: Response):
-#     try:
-#         if not os.path.exists('/data/saved_file_finished'):
-#             return JSONResponse(status_code=200, content={'msg' : 'Please wait until save process finished'}) 
-#         ret = pipeplineExportWithColors()
-#         print(ret)
-#         if not (ret['status'] == 'ok') :
-#             return JSONResponse(status_code=400, content={'msg' : ret['msg']}) 
-#         scan.set_potreePath(ret['msg']['potreePath']) 
-#         return {"msg": ret['msg'] }
-
-#     except Exception as e : 
-#         print(str(e))
-#         return JSONResponse(status_code=400, content={'msg' : str(e)}) 
-    
+    except Exception as e : 
+        print(str(e))
+        return JSONResponse(status_code=400, content={'msg' : str(e)}) 
 # @app.get("/zipPotree")
 # def zipPotree(response: Response):
 #     try:

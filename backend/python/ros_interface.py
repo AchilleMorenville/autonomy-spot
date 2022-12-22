@@ -19,7 +19,7 @@ class RosInterface(Node):
 		self.slam_started = False
 		self.map_saved = False
 
-		self.potree_path = 'None'
+		self.potree_path = None
 
 	def set_potree_path(self, path):
 		self.potree_path = path

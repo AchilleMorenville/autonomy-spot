@@ -235,7 +235,7 @@ def potree(response: Response):
         if ros_interface is None:
             return JSONResponse(status_code=400, content={'msg' : "Ros interface not launched"}) 
 
-        if ros_interface.set_potree_path == None : 
+        if ros_interface.get_potree_path() == None : 
             return JSONResponse(status_code=200, content={'msg' : 'Please export to potree first'}) 
 
         ret = createZip(ros_interface.get_potreePath()) 

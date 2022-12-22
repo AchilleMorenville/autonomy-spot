@@ -267,11 +267,12 @@ def send2Site3d(response: Response, realtityCaptureName : str = None):
                 token = token.token
 
                 retZip =  createZip(ros_interface.get_potree_path()) 
-
+                print(retZip)
                 RCName = realtityCaptureName
                 jobsiteId = '339446f0-6c37-11ed-8aba-99170584c638'
    
                 retSite3d = sendPointCloud2Cloud(ros_interface.get_potree_path(),url = SITE3D_url, RCName=RCName, jobsiteId=jobsiteId,  token = token)
+                print(retSite3d)
                 if not (retSite3d['status'] == 'ok') : 
                     return JSONResponse(status_code=400, content={'msg' : retSite3d['msg']}) 
                 

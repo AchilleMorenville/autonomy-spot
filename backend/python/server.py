@@ -238,7 +238,7 @@ def potree(response: Response):
         if ros_interface.get_potree_path() == None : 
             return JSONResponse(status_code=200, content={'msg' : 'Please export to potree first'}) 
 
-        ret = createZip(ros_interface.get_potreePath()) 
+        ret = createZip(ros_interface.get_potree_path()) 
         print(ret)
         if not (ret['status'] == 'ok') :
             return JSONResponse(status_code=400, content={'msg' : ret['msg']}) 

@@ -276,7 +276,7 @@ def send2Site3d(response: Response, realtityCaptureName : str = None):
                 if not (retSite3d['status'] == 'ok') : 
                     return JSONResponse(status_code=400, content={'msg' : retSite3d['msg']}) 
                 
-                return {'msg' : {"msgSite3d": retSite3d['msg'] , 'msgZip' : retZip['msgZip']}}
+                return {'msg' : {"msgSite3d": retSite3d['msg'] , 'msgZip' : retZip['msg']}}
 
             except Exception as e : 
                 print(str(e))

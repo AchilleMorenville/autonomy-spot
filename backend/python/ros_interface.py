@@ -14,6 +14,7 @@ class RosInterface(Node):
 		self.client_slam_save_map = self.create_client(SlamSaveMap, "slam/save_map")
 		self.client_slam_reset = self.create_client(Trigger, "slam/reset")
 		self.client_spot_driver_odometry_connect = self.create_client(Trigger, "spot_driver/odometry/connect")
+		self.client_spot_driver_fiducial_connect = self.create_client(Trigger, "spot_driver/fiducial/connect")
 
 		self.robot_connected = False
 		self.slam_started = False
@@ -71,13 +72,17 @@ class RosInterface(Node):
 
 	def send_request_spot_driver_connect(self):
 		req = Trigger.Request()
-		future = self.client_spot_driver_odometry_connect.call_async(req)
-		rclpy.spin_until_future_complete(self, future, timeout_sec=5.0)
+		future_odometry = self.client_spot_driver_odometry_connect.call_async(req)
+		rclpy.spin_until_future_complete(self, future_odometry, timeout_sec=5.0)
 
-		if future.result() is not None and future.result().success == True:
+		req = Trigger.Request()
+		future_fiducial = self.client_spot_driver_fiducial_connect.call_async(req)
+		rclpy.spin_until_future_complete(self, future_fiducial, timeout_sec=5.0)
+
+		if (future_odometry.result() is not None and future_odometry.result().success == True) and (future_fiducial.result() is not None and future_fiducial.result().success == True):
 			self.robot_connected = True
 
-		return future.result()
+		return future_odometry.result()
 
 def test():
 	rclpy.init()

@@ -297,8 +297,8 @@ def rosTimeStamp(response: Response):
             return JSONResponse(status_code=400, content={'msg' : "Ros interface not launched"}) 
         
         ts = ros_interface.get_timestamp()
-
-        return {'msg' : {'ts' : ts}} 
+        
+        return {'msg' : {'ts' : {'sec' : ts.sec, 'nanosec' : ts.nanosec}}}
 
 
 

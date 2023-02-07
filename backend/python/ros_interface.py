@@ -4,6 +4,7 @@ from std_srvs.srv import Trigger
 import rclpy
 from rclpy.node import Node
 
+
 class RosInterface(Node):
 
 	def __init__(self):
@@ -85,8 +86,7 @@ class RosInterface(Node):
 		return future_odometry.result()
 	
 	def get_timestamp(self):
-		return self.get_clock().now()
-
+		return self.get_clock().now().to_msg()
 def test():
 	rclpy.init()
 

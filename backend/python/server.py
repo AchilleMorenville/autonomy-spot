@@ -288,6 +288,26 @@ def send2Site3d(response: Response, realtityCaptureName : str = None):
         return JSONResponse(status_code=400, content={'msg' : str(e)}) 
 
 
+
+@app.get("/rosTimeStamp")
+def rosTimeStamp(response: Response):
+    global ros_interface
+    try:
+        if ros_interface is None:
+            return JSONResponse(status_code=400, content={'msg' : "Ros interface not launched"}) 
+        
+        ts = ros_interface.get_timestamp()
+
+        return {'msg' : {'ts' : ts}} 
+
+
+
+    except Exception as e : 
+        print(str(e))
+        return JSONResponse(status_code=400, content={'msg' : str(e)})         
+
+
+
 # @app.get("/send2Site3d")
 # def zipPotree(response: Response, realtityCaptureName : str = None):
 #     try : 

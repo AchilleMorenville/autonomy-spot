@@ -83,6 +83,9 @@ class RosInterface(Node):
 			self.robot_connected = True
 
 		return future_odometry.result()
+	
+	def get_timestamp(self):
+		return self.get_clock().now()
 
 def test():
 	rclpy.init()

@@ -61,7 +61,7 @@ class RosInterface(Node):
 
 	def send_request_slam_save_map(self, destination, resolution=0.01):
 		req = SlamSaveMap.Request()
-		req.destination = destination + "/map_go.pcd"
+		req.destination = destination
 		req.resolution = resolution
 		future = self.client_slam_save_map.call_async(req)
 		rclpy.spin_until_future_complete(self, future, timeout_sec=30.0)

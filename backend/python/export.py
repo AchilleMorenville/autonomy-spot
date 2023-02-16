@@ -65,7 +65,7 @@ def exportToPotree(pcd):
         new_las.write(LasFile)
         print("Export Laz Done")
 
-        PotreeConverterPath = '/src/PotreeConverter-2.1.1/build/PotreeConverter'
+        PotreeConverterPath = '/src/PotreeConverter-master/PotreeConverter-master/build/PotreeConverter'
         
         pageName = 'spot'
         result = subprocess.run(

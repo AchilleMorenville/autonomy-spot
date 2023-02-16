@@ -20,9 +20,9 @@ RUN . /opt/ros/humble/setup.sh && \
 # Install PotreeConverter
 
 WORKDIR /src
-RUN wget https://github.com/potree/PotreeConverter/archive/refs/tags/2.1.1.tar.gz
-RUN tar -xvzf 2.1.1.tar.gz
-WORKDIR /src/PotreeConverter-2.1.1/build
+RUN wget https://github.com/CSTC-WTCB-BBRI/PotreeConverter/archive/refs/heads/master.zip
+RUN unzip PotreeConverter-master.zip
+WORKDIR /src/PotreeConverter-master/PotreeConverter-master/build
 RUN cmake ..
 RUN make -j 4
 

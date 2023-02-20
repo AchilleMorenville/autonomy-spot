@@ -21,8 +21,8 @@ RUN . /opt/ros/humble/setup.sh && \
 
 WORKDIR /src
 RUN wget https://github.com/CSTC-WTCB-BBRI/PotreeConverter/archive/refs/heads/master.zip
-RUN unzip PotreeConverter-master.zip
-WORKDIR /src/PotreeConverter-master/PotreeConverter-master/build
+RUN unzip master.zip
+WORKDIR /src/PotreeConverter-master/build
 RUN cmake ..
 RUN make -j 4
 

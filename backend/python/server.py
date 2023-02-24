@@ -77,6 +77,60 @@ async def read_items():
         </body>
     </html>
     """
+def wakeup():
+    status = False
+    out = subprocess.run(['ptpcam', '--set-property=0xD80E' ,'--val=0x00'], capture_output=True, text=True)
+    if ('succeeded' in out.stdout) : status = True
+    return status
+
+@app.get("/set_360_wakeup")
+def set_360_wakeup(response: Response):
+    try:
+        status = wakeup()
+        return {"msg" : status}
+    except Exception as e:
+        return {"msg" : str(e)}
+
+@app.get("/get_360_image")
+def get_360_image(response: Response):
+    try:
+        import subprocess
+        import os
+        import glob
+        import shutil
+        from datetime import datetime
+        import math
+        import json
+        import time
+        #attempt = 0
+        #while (not wakeup()) :
+        #   attempt+=1
+        #   if (attempt > 10 ) : return {'msg' : "360 degree cam does'nt wake up!!\n max num of attempts reached!"}
+        #time.sleep(0.5)
+        path = "/data/360"
+        os.chdir(path)
+
+        #os.mkdir("im")
+        ts = math.modf(datetime.timestamp(datetime.now()))
+        out = subprocess.run(['gphoto2', '--capture-image-and-download'], capture_output=True, text=True)
+        l = glob.glob('*.JPG')
+        shutil.move(l[0], 'im')
+
+        data = {}
+        data['im360'] = l[0]
+        data['ts'] ={}
+        data['ts']['sec'] = math.floor(ts[1])
+        data['ts']['nanosec'] = math.floor(ts[0]*1e9)
+        json_file = 'im/' + l[0].split('.JPG')[0] + '.json'
+        with open(json_file, "w") as write_file:
+            json.dump(data, write_file, indent=4)
+        
+        return {"msg" : str(out.stdout)}
+
+    except Exception as e:
+        print(str(e))
+        return {'msg' : str(e)}
+
 
 @app.get("/launch") 
 def launch(response: Response):

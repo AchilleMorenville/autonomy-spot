@@ -1,4 +1,4 @@
-from autonomous_interfaces.srv import SlamSaveMap
+from aut_msgs.srv import SaveMap
 from std_srvs.srv import Trigger
 
 import rclpy
@@ -12,7 +12,7 @@ class RosInterface(Node):
 
 		self.client_slam_start = self.create_client(Trigger, "aut_slam/start")
 		self.client_slam_stop = self.create_client(Trigger, "aut_slam/stop")
-		self.client_slam_save_map = self.create_client(SlamSaveMap, "aut_slam/save_map")
+		self.client_slam_save_map = self.create_client(SaveMap, "aut_slam/save_map")
 		self.client_slam_reset = self.create_client(Trigger, "aut_slam/reset")
 
 		self.robot_connected = False
@@ -58,7 +58,7 @@ class RosInterface(Node):
 		return future.result()
 
 	def send_request_slam_save_map(self, destination, resolution=0.01):
-		req = SlamSaveMap.Request()
+		req = SaveMap.Request()
 		req.destination = destination
 		req.resolution = resolution
 		future = self.client_slam_save_map.call_async(req)

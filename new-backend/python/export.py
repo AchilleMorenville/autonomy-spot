@@ -130,7 +130,7 @@ def sendPointCloud2Cloud(potreePath,
 
 def pipeplineExportWithColors(folderName):
     try : 
-        baseName = f"/data/{folderName}/map" 
+        baseName = f"{folderName}/map" 
         fileFormat = "pcd"
         outFilename="%s.%s" % (baseName, fileFormat)
         pcd = o3d.io.read_point_cloud(outFilename)

@@ -239,7 +239,7 @@ def reset_slam(response: Response):
         return {'msg' : str(e)}
 
 @app.get("/save_map_slam/{name}") 
-def save_map_slam(name: Union(str, None), response: Response):
+def save_map_slam(name: Union[str, None], response: Response):
     global ros_interface
     try:
         if ros_interface is None:
@@ -260,7 +260,7 @@ def save_map_slam(name: Union(str, None), response: Response):
         return {'msg' : str(e)}
 
 @app.get("/potree/{name}")
-def potree(name: Union(str, None), response: Response):
+def potree(name: Union[str, None], response: Response):
     global ros_interface
     try:
 

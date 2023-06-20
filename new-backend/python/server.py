@@ -14,8 +14,8 @@ from fastapi.responses import HTMLResponse
 
 from export import *
 
-from tb_rest_client.rest_client_pe import Device, RestClientPE
-from tb_rest_client.rest import ApiException
+# from tb_rest_client.rest_client_pe import Device, RestClientPE
+# from tb_rest_client.rest import ApiException
 
 from ros_interface import RosInterface
 
@@ -306,44 +306,44 @@ def potree(response: Response):
         print(str(e))
         return JSONResponse(status_code=400, content={'msg' : str(e)}) 
 
-@app.get("/send2Site3d")
-def send2Site3d(response: Response, realtityCaptureName : str = None):
-    global ros_interface
-    try:
-        if ros_interface is None:
-            return JSONResponse(status_code=400, content={'msg' : "Ros interface not launched"}) 
+# @app.get("/send2Site3d")
+# def send2Site3d(response: Response, realtityCaptureName : str = None):
+#     global ros_interface
+#     try:
+#         if ros_interface is None:
+#             return JSONResponse(status_code=400, content={'msg' : "Ros interface not launched"}) 
 
-        if ros_interface.get_potree_path() == None : 
-            return JSONResponse(status_code=200, content={'msg' : 'Please export to potree first'}) 
+#         if ros_interface.get_potree_path() == None : 
+#             return JSONResponse(status_code=200, content={'msg' : 'Please export to potree first'}) 
 
-        with RestClientPE(base_url=TB_url) as rest_client:
-            try:
-                # Auth with credentials
-                rest_client.login(username=TB_user, password=TB_password)
-                current_user = rest_client.get_user()
-                token = rest_client.get_user_token(current_user.id)
-                token = token.token
+#         with RestClientPE(base_url=TB_url) as rest_client:
+#             try:
+#                 # Auth with credentials
+#                 rest_client.login(username=TB_user, password=TB_password)
+#                 current_user = rest_client.get_user()
+#                 token = rest_client.get_user_token(current_user.id)
+#                 token = token.token
 
-                retZip =  createZip(ros_interface.get_potree_path()) 
-                print(retZip)
-                RCName = realtityCaptureName
-                jobsiteId = '339446f0-6c37-11ed-8aba-99170584c638'
+#                 retZip =  createZip(ros_interface.get_potree_path()) 
+#                 print(retZip)
+#                 RCName = realtityCaptureName
+#                 jobsiteId = '339446f0-6c37-11ed-8aba-99170584c638'
    
-                retSite3d = sendPointCloud2Cloud(ros_interface.get_potree_path(),url = SITE3D_url, RCName=RCName, jobsiteId=jobsiteId,  token = token)
-                print(retSite3d)
-                if not (retSite3d['status'] == 'ok') : 
-                    return JSONResponse(status_code=400, content={'msg' : retSite3d['msg']}) 
+#                 retSite3d = sendPointCloud2Cloud(ros_interface.get_potree_path(),url = SITE3D_url, RCName=RCName, jobsiteId=jobsiteId,  token = token)
+#                 print(retSite3d)
+#                 if not (retSite3d['status'] == 'ok') : 
+#                     return JSONResponse(status_code=400, content={'msg' : retSite3d['msg']}) 
                 
-                return {'msg' : {"msgSite3d": retSite3d['msg'] , 'msgZip' : retZip['msg']}}
+#                 return {'msg' : {"msgSite3d": retSite3d['msg'] , 'msgZip' : retZip['msg']}}
 
-            except Exception as e : 
-                print(str(e))
-                return JSONResponse(status_code=400, content={'msg' : str(e)}) 
+#             except Exception as e : 
+#                 print(str(e))
+#                 return JSONResponse(status_code=400, content={'msg' : str(e)}) 
 
 
-    except Exception as e : 
-        print(str(e))
-        return JSONResponse(status_code=400, content={'msg' : str(e)}) 
+#     except Exception as e : 
+#         print(str(e))
+#         return JSONResponse(status_code=400, content={'msg' : str(e)}) 
 
 
 

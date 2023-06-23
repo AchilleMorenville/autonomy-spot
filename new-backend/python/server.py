@@ -259,6 +259,86 @@ def save_map_slam(name: Union[str, None], response: Response):
         print(str(e))
         return {'msg' : str(e)}
 
+@app.get("/start_localization") 
+def start_localization(response: Response):
+    global ros_interface
+    try:
+        if ros_interface is None:
+            return JSONResponse(status_code=400, content={'msg' : "Ros interface not launched"}) 
+
+        ret = ros_interface.send_request_localization_start()
+        if ret is None : 
+            return JSONResponse(status_code=400, content={'msg' : "Ros service unreachable"}) 
+        elif not ret.success :
+            return JSONResponse(status_code=400, content={'msg' : "Can't start localization : " + ret.message}) 
+        else : 
+            return {'msg' : "Localization started"}
+
+    except Exception as e:
+        print(str(e))
+        return {'msg' : str(e)}
+
+@app.get("/stop_localization") 
+def stop_localization(response: Response):
+    global ros_interface
+    try:
+        if ros_interface is None:
+            return JSONResponse(status_code=400, content={'msg' : "Ros interface not launched"}) 
+
+        ret = ros_interface.send_request_localization_stop()
+        if ret is None : 
+            return JSONResponse(status_code=400, content={'msg' : "Ros service unreachable"}) 
+        elif not ret.success :
+            return JSONResponse(status_code=400, content={'msg' : "Can't stop localization : " + ret.message}) 
+        else : 
+            return {'msg' : "Localization stoped"}
+
+    except Exception as e:
+        print(str(e))
+        return {'msg' : str(e)}
+
+@app.get("/load_map_localization/{name}") 
+def load_map_localization(name: Union[str, None], response: Response):
+    global ros_interface
+    try:
+        if ros_interface is None:
+            return JSONResponse(status_code=400, content={'msg' : "Ros interface not launched"}) 
+
+        dest = f"/data/{name}" if name is not None else "/data/map"
+
+        ret = ros_interface.send_request_localization_load_map(destination=dest)
+        if ret is None : 
+            return JSONResponse(status_code=400, content={'msg' : "Ros service unreachable"}) 
+        elif not ret.success :
+            return JSONResponse(status_code=400, content={'msg' : "Can't load map : " + ret.message}) 
+        else : 
+            return {'msg' : "Map loaded"}
+
+    except Exception as e:
+        print(str(e))
+        return {'msg' : str(e)}
+
+@app.get("/load_map_navigation/{name}") 
+def load_map_navigation(name: Union[str, None], response: Response):
+    global ros_interface
+    try:
+        if ros_interface is None:
+            return JSONResponse(status_code=400, content={'msg' : "Ros interface not launched"}) 
+
+        dest = f"/data/{name}" if name is not None else "/data/map"
+
+        ret = ros_interface.send_request_navigation_load_map(destination=dest)
+        if ret is None : 
+            return JSONResponse(status_code=400, content={'msg' : "Ros service unreachable"}) 
+        elif not ret.success :
+            return JSONResponse(status_code=400, content={'msg' : "Can't load map : " + ret.message}) 
+        else : 
+            return {'msg' : "Map loaded"}
+
+    except Exception as e:
+        print(str(e))
+        return {'msg' : str(e)}
+
 @app.get("/potree/{name}")
 def potree(name: Union[str, None], response: Response):
     global ros_interface

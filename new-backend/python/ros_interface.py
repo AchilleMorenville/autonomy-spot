@@ -72,7 +72,7 @@ class RosInterface(Node):
 		req.destination = destination
 		req.resolution = resolution
 		future = self.client_slam_save_map.call_async(req)
-		rclpy.spin_until_future_complete(self, future, timeout_sec=30.0)
+		rclpy.spin_until_future_complete(self, future, timeout_sec=120.0)
 
 		if future.result() is not None and future.result().success == True:
 			self.map_saved = True
@@ -103,7 +103,7 @@ class RosInterface(Node):
 		req = LoadMap.Request()
 		req.map_directory_path = destination
 		future = self.client_localization_load_map.call_async(req)
-		rclpy.spin_until_future_complete(self, future, timeout_sec=30.0)
+		rclpy.spin_until_future_complete(self, future, timeout_sec=120.0)
 
 		if future.result() is not None and future.result().success == True:
 			self.localization_map_loaded = True
@@ -114,7 +114,7 @@ class RosInterface(Node):
 		req = LoadMap.Request()
 		req.map_directory_path = destination
 		future = self.client_navigation_load_map.call_async(req)
-		rclpy.spin_until_future_complete(self, future, timeout_sec=30.0)
+		rclpy.spin_until_future_complete(self, future, timeout_sec=120.0)
 
 		if future.result() is not None and future.result().success == True:
 			self.navigation_map_loaded = True

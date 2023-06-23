@@ -20,7 +20,7 @@ class RosInterface(Node):
 		self.client_localization_stop = self.create_client(Trigger, "aut_localization/stop")
 		self.client_localization_load_map = self.create_client(LoadMap, "aut_localization/load_map")
 
-		self.client_navigation_load_map = self.create_client(LoadMap, "aut_navigation/load_map")
+		self.client_navigation_load_map = self.create_client(LoadMap, "aut_global_planner/load_map")
 
 		self.robot_connected = False
 		self.slam_started = False
@@ -123,6 +123,7 @@ class RosInterface(Node):
 	
 	def get_timestamp(self):
 		return self.get_clock().now().to_msg()
+
 def test():
 	rclpy.init()
 
